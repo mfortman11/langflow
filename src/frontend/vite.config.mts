@@ -12,7 +12,7 @@ import {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
-  const apiRoutes = API_ROUTES || ["^/api/v1/", "/health"];
+  const apiRoutes = API_ROUTES || ["^/api/v1/", "/health", "/logs-stream"];
 
   const target =
     env.VITE_PROXY_TARGET || PROXY_TARGET || "http://127.0.0.1:7860";
@@ -25,6 +25,11 @@ export default defineConfig(({ mode }) => {
       changeOrigin: true,
       secure: false,
       ws: true,
+      configure: (proxy, options) => {
+        proxy.on('proxyReq', (proxyReq, req, res) => {
+          proxyReq.setHeader('Connection', 'keep-alive');
+        });
+      },
     };
     return proxyObj;
   }, {});

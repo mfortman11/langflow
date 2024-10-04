@@ -28,6 +28,7 @@ import { cn } from "../../../../utils/utils";
 import IconComponent from "../../../genericIconComponent";
 import ShadTooltip from "../../../shadTooltipComponent";
 import { Button } from "../../../ui/button";
+import LiveLogsModal from "@/modals/liveLogsModal";
 
 export const MenuBar = ({}: {}): JSX.Element => {
   const shortcuts = useShortcutsStore((state) => state.shortcuts);
@@ -39,6 +40,7 @@ export const MenuBar = ({}: {}): JSX.Element => {
   const saveLoading = useFlowsManagerStore((state) => state.saveLoading);
   const [openSettings, setOpenSettings] = useState(false);
   const [openLogs, setOpenLogs] = useState(false);
+  const [openLiveLogs, setOpenLiveLogs] = useState(false)
   const uploadFlow = useUploadFlow();
   const navigate = useCustomNavigate();
   const isBuilding = useFlowStore((state) => state.isBuilding);
@@ -166,6 +168,18 @@ export const MenuBar = ({}: {}): JSX.Element => {
               Logs
             </DropdownMenuItem>
             <DropdownMenuItem
+              onClick={() => {
+                setOpenLiveLogs(true);
+              }}
+              className="cursor-pointer"
+            >
+              <IconComponent
+                name="ScrollText"
+                className="header-menu-options"
+              />
+              Live Logs
+            </DropdownMenuItem>
+            <DropdownMenuItem
               className="cursor-pointer"
               onClick={() => {
                 uploadFlow({ position: { x: 300, y: 100 } })
@@ -245,6 +259,7 @@ export const MenuBar = ({}: {}): JSX.Element => {
           setOpen={setOpenSettings}
         ></FlowSettingsModal>
         <FlowLogsModal open={openLogs} setOpen={setOpenLogs}></FlowLogsModal>
+        <LiveLogsModal open={openLiveLogs} setOpen={setOpenLiveLogs}></LiveLogsModal>
       </div>
       <div className="flex items-center">
         {!autoSaving && (

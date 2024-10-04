@@ -38,12 +38,12 @@ async def event_generator(request: Request):
                         last_read_item = item
         if to_write:
             for ts, msg in to_write:
-                yield f"{json.dumps({ts:msg})}\n\n"
+                yield f"data: {json.dumps({ts: msg})}\n\n"
         else:
             current_not_sent += 1
             if current_not_sent == 5:
                 current_not_sent = 0
-                yield "keepalive\n\n"
+                yield ": keepalive\n\n"
 
         await asyncio.sleep(1)
 
